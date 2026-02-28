@@ -57,21 +57,49 @@ GitHub will serve the repo root at that domain, so **https://songdropper.com/.we
    - **Value:** `spencerdcarlson.github.io`  
    (Use your GitHub username if different.)
 
-4. Save. DNS can take a few minutes up to 48 hours. Back in GitHub **Settings → Pages → Custom domain**, the domain should eventually show as verified.
+4. Save. Check with:
+   ```bash
+   dig songdropper.com +short A
+   ```
+   You should see the four GitHub IPs. DNS can take a few minutes up to 48 hours.
 
 ---
 
-## 4. Verify
+## 4. Domain verification (TXT record) — recommended
+
+GitHub recommends **verifying** the domain so only your account can use it with Pages (avoids takeover if the site is ever disabled). This uses a **DNS TXT record**, not a file in the repo.
+
+1. In GitHub, go to the **repo** **song-dropper-site** → **Settings** → **Pages**. Under **Custom domain**, enter `songdropper.com` and click **Save** if you haven’t already.
+2. If GitHub shows a message like **“Verify”** or **“Add a DNS TXT record”**, it will give you:
+   - **Name/host:** e.g. `_github-pages-challenge-spencerdcarlson.songdropper.com` (your username + domain)
+   - **Value:** a short string GitHub generates (e.g. `abc123...`)
+3. In **GoDaddy** → **DNS** for songdropper.com, add a **TXT** record:
+   - **Type:** TXT  
+   - **Name:** `_github-pages-challenge-spencerdcarlson` (only the subdomain part; GoDaddy may add `.songdropper.com` automatically)  
+   - **Value:** the exact value GitHub showed  
+   - **TTL:** 600 (or default)
+4. Save. After DNS propagates (minutes to a few hours), check:
+   ```bash
+   dig _github-pages-challenge-spencerdcarlson.songdropper.com +nostats +nocomments +nocmd TXT
+   ```
+   You should see the value you set.
+5. Back in GitHub **Settings → Pages**, next to the domain click **Verify** (or **Continue verifying**). Once it succeeds, the domain will show as verified.
+
+You do **not** add any `.txt` file to this repo — verification is done only via DNS.
+
+---
+
+## 5. Verify the site and assetlinks
 
 Open in a browser:
 
 **https://songdropper.com/.well-known/assetlinks.json**
 
-You should see your JSON with the correct `package_name` and `sha256_cert_fingerprints`. It must be **HTTPS**.
+You should see your JSON with the correct `package_name` and `sha256_cert_fingerprints`. It must be **HTTPS**. If the A records are correct but this URL doesn’t load yet, wait for DNS and ensure **Enforce HTTPS** is enabled under Pages settings (can take a while after the domain is set).
 
 ---
 
-## 5. How this repo is used (submodule)
+## 6. How this repo is used (submodule)
 
 The **Song Dropper Android** app repo (private) includes this repo as a **git submodule** at `docs/app-links`. To change `assetlinks.json` or this README:
 
