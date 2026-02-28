@@ -5,7 +5,7 @@
       "namespace": "android_app",
       "package_name": "com.songdropper.android",
       "sha256_cert_fingerprints": [
-        "REPLACE_WITH_DEBUG_SHA256",
+        "16:DE:5E:71:35:56:55:16:53:8F:CA:36:A9:35:29:C2:5E:BB:96:63:5A:91:8E:B1:DE:35:CA:B9:D0:71:3D:AB",
         "REPLACE_WITH_RELEASE_SHA256"
       ]
     }
